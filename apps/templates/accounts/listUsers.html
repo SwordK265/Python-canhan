@@ -1,0 +1,62 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} List Winemags {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="auth-wrapper">
+    <div class="auth-bg">
+        <span class="r"></span>
+        <span class="r s"></span>
+        <span class="r s"></span>
+        <span class="r"></span>
+    </div>
+    <div class="card">
+        <div class="card-body text-center">
+            <div class="mb-4">
+                <i class="feather icon-users auth-icon"></i>
+            </div>
+            <h3 class="mb-4">List Users: {{length}}</h3>
+
+            <nav class="navbar navbar-light bg-light">
+                <form class="form-inline" action = "http://localhost:1410/resultqueryusers" method = "POST">
+                    <input class="form-control mr-sm-2" type="search" placeholder="student code or class" aria-label="Search" name = "Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </nav>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">student code</th>
+                        <th scope="col">First name</th>
+                        <th scope="col">Last name</th>
+                        <th scope="col">DOB</th>
+                        <th scope="col">CN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i,user in users %}
+                    <tr>
+                        <td>{{user['No']}}</td>
+                        <td>{{user['student code']}}</td>
+                        <td>{{user['First name']}}</td>
+                        <td>{{user['Last name']}}</td>
+                        <td>{{user['DOB']}}</td>
+                        <td>{{user['CN']}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

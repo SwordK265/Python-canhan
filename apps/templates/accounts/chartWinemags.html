@@ -1,0 +1,178 @@
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
+</head>
+
+{% extends "layouts/base.html" %}
+
+{% block title %} Charts Morris {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<link rel="stylesheet" href="/static/assets/plugins/chart-morris/css/morris.css">
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <center>
+                        <h3 class="m-b-10">{{ title }}</h3>
+                    </center>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<form
+  action="http://localhost:1410/chartwinemags"
+  method="get"
+  class="main-body2"
+>
+  <input id="car" type="text" list=" values" name="values" />
+  <datalist id=" values">
+    <option value="points"></option>
+    <option value="price"></option>
+  </datalist>
+
+  <button type="submit">Submit</button>
+</form>
+<div class="main-body">
+    <div class="page-wrapper">
+        <div class="row">
+            <!-- [ Morris Chart ] start -->
+            <div class="col-xl-9">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Bar Chart</h5>
+                    </div>
+                    <div class="card-block text-center">
+                        <canvas id="bar_chart" width="800" height="500"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-9">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Line Chart</h5>
+                    </div>
+                    <div class="card-block">
+                        <canvas id="line_chart" width="800" height="500"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-9">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Pie Chart</h5>
+                    </div>
+                    <div class="card-block">
+                        <canvas id="pie_chart" width="800" height="500"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- [ Morris Chart ] end -->
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block javascripts %}
+<!-- https://blog.ruanbekker.com/blog/2017/12/14/graphing-pretty-charts-with-python-flask-and-chartjs/ -->
+
+<script>
+    // bar chart data
+    var barData = {
+        labels: [
+            {% for item in labels %}
+    "{{ item }}",
+        {% endfor %}
+	],
+
+    datasets: [{
+        fillColor: "rgba(151,187,205,0.2)",
+        strokeColor: "rgba(151,187,205,1)",
+        pointColor: "rgba(151,187,205,1)",
+        data: [
+            {% for item in values %}
+               "{{ item }}",
+    {% endfor %}
+    ]
+          }
+        ]
+      }
+
+
+
+    Chart.defaults.global.animationSteps = 50;
+    Chart.defaults.global.tooltipYPadding = 16;
+    Chart.defaults.global.tooltipCornerRadius = 0;
+    Chart.defaults.global.tooltipTitleFontStyle = "normal";
+    Chart.defaults.global.tooltipFillColor = "rgba(0,0,0,0.8)";
+    Chart.defaults.global.animationEasing = "easeOutBounce";
+    Chart.defaults.global.responsive = false;
+    Chart.defaults.global.scaleLineColor = "black";
+    Chart.defaults.global.scaleFontSize = 16;
+
+    // get bar chart canvas
+    var bar_chart = document.getElementById("bar_chart").getContext("2d");
+    var line_chart = document.getElementById("line_chart").getContext("2d");
+
+
+    steps = 10
+    max = {{ max }}
+
+    // draw bar chart
+    new Chart(bar_chart).Bar(barData, {
+        scaleOverride: true,
+        scaleSteps: steps,
+        scaleStepWidth: Math.ceil(max / steps),
+        scaleStartValue: 0,
+        scaleShowVerticalLines: true,
+        scaleShowGridLines: true,
+        barShowStroke: true,
+        scaleShowLabels: true
+    }
+    );
+
+    var LineChartDemo = new Chart(line_chart).Line(barData, {
+        scaleOverride: true,
+        scaleSteps: steps,
+        scaleStepWidth: Math.ceil(max / steps),
+        scaleStartValue: 0,
+        scaleShowVerticalLines: true,
+        scaleShowGridLines: true,
+        barShowStroke: true,
+        scaleShowLabels: true,
+        bezierCurve: false,
+    });
+</script>
+
+<script>
+  var pieData = [
+        {% for item, label, colors in set %}
+    {
+        value: {{item}},
+        label: "{{label}}",
+            color : "{{colors}}"
+    },
+    {% endfor %}
+      ];
+
+    // get bar chart canvas
+    var mychart = document.getElementById("pie_chart").getContext("2d");
+    steps = 10
+    max = {{ max }}
+
+    // draw pie chart
+    new Chart(document.getElementById("pie_chart").getContext("2d")).Pie(pieData);
+</script>
+{% endblock javascripts %}

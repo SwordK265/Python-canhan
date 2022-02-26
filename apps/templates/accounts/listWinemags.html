@@ -1,0 +1,87 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} List Winemags {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="auth-wrapper">
+    <div class="auth-bg">
+        <span class="r"></span>
+        <span class="r s"></span>
+        <span class="r s"></span>
+        <span class="r"></span>
+    </div>
+    <div class="card">
+        <div class="card-body text-center">
+            <div class="mb-4">
+                <i class="feather icon-users auth-icon"></i>
+            </div>
+            <h3 class="mb-4">List Winemags: {{length}}</h3>
+
+            <nav class="navbar navbar-light bg-light ">
+                <form class="form-inline" action="http://localhost:1410/showwinemags" method="POST">
+                    <input class="form-control mr-sm-2" type="search" placeholder="full attributes" aria-label="Search"
+                        name="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+
+                    <input
+                        type="submit"
+                        name="All"
+                        class="btn btn-outline-success my-2 my-sm-0"
+                        value="All"
+                    />
+
+                </form>
+            </nav>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">no</th>
+                        <th scope="col">country</th>
+                        <th scope="col">description</th>
+                        <th scope="col">designation</th>
+                        <th scope="col">points</th>
+                        <th scope="col">price</th>
+                        <th scope="col">province</th>
+                        <th scope="col">region_1</th>
+                        <th scope="col">region_2</th>
+                        <th scope="col">taster_name</th>
+                        <th scope="col">taster twitter handle</th>
+                        <th scope="col">title</th>
+                        <th scope="col">variety</th>
+                        <th scope="col">winery</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i,winemag in winemags %}
+                    <tr>
+                        <td>{{i}}</td>
+                        <td>{{winemag['country']}}</td>
+                        <td>{{winemag['description'][0:30]}}...</td>
+                        <td>{{winemag['designation']}}</td>
+                        <td>{{winemag['points']}}</td>
+                        <td>{{winemag['price']}}</td>
+                        <td>{{winemag['province']}}</td>
+                        <td>{{winemag['region_1']}}</td>
+                        <td>{{winemag['region_2']}}</td>
+                        <td>{{winemag['taster_name']}}</td>
+                        <td>{{winemag['taster_twitter_handle']}}</td>
+                        <td>{{winemag['title']}}</td>
+                        <td>{{winemag['variety']}}</td>
+                        <td>{{winemag['winery']}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
